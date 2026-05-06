@@ -19,15 +19,29 @@
     --tag-social: #e8e4d4;
   }
 
+  @keyframes hueshift {
+    0%   { background-color: #f2f0e8; }
+    16%  { background-color: #e8f2ec; }
+    33%  { background-color: #e8ecf2; }
+    50%  { background-color: #f0e8f2; }
+    66%  { background-color: #f2e8e8; }
+    83%  { background-color: #f2ede6; }
+    100% { background-color: #f2f0e8; }
+  }
+
   body {
-    background: var(--bg);
+    background: #f2f0e8;
+    animation: hueshift 30s ease-in-out infinite;
     color: var(--fg);
     font-family: 'Courier New', Courier, monospace;
     font-size: 14px;
     line-height: 1.7;
-    max-width: 780px;
-    margin: 0 auto;
-    padding: 60px 24px 120px;
+    padding: 60px 40px 120px;
+  }
+
+  .col-right {
+    min-width: 0;
+    padding: 0 0 0 60px;
   }
 
   pre, code { font-family: inherit; }
@@ -100,7 +114,7 @@
   }
 
   .nav-links li:first-child {
-    border-top: 1px solid var(--border);
+    border-top: none;
   }
 
   .nav-links a {
@@ -136,6 +150,7 @@
     cursor: pointer;
     color: var(--dim);
     letter-spacing: 0.06em;
+    border-radius: 4px;
   }
 
   .filter-btn.active, .filter-btn:hover {
@@ -278,6 +293,21 @@
 
   .download-btn:hover { opacity: 0.8; }
 
+  /* ── TWO COLUMN LAYOUT ── */
+  .page-layout {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    gap: 60px;
+    align-items: start;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .col-left {
+    position: sticky;
+    top: 60px;
+  }
+
   /* ── FOOTER ── */
   footer {
     margin-top: 80px;
@@ -291,57 +321,74 @@
   a:hover { text-decoration: none; }
 
   .hidden { display: none !important; }
+
+  .star-line {
+    font-size: 11px;
+    color: var(--dim);
+    margin: 12px 0 20px;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+
+  @media (max-width: 700px) {
+    .page-layout {
+      grid-template-columns: 1fr;
+    }
+    .col-left {
+      position: static;
+    }
+  }
 </style>
 </head>
 <body>
 
-<header class="site-header">
+<div class="page-layout">
+
+<div class="col-left">
   <div class="ascii-banner">
-+------------------------------------------------------------------+
-|  hardware --&gt; software --&gt; society                             |
-|  designing ai literacy through infrastructure                    |
-+------------------------------------------------------------------+</div>
++--------------------------------------------+
+|  hardware --&gt; software --&gt; society         |
++--------------------------------------------+</div>
 
   <h1>Designing AI Literacy Through Infrastructure</h1>
   <p class="subtitle">A Designed Knowledge Base + Teaching Toolkit</p>
-  <p class="subtitle">Tandis Shoushtary &mdash; Capstone Project, 2026</p>
-  <div class="meta-line">
-    57 sources &nbsp;|&nbsp; 4 thematic clusters &nbsp;|&nbsp;
-    Material Infrastructure &middot; Data &amp; Platform Ecosystems &middot; Governance &amp; Regulation &middot; Social / User Infrastructure
-  </div>
-</header>
+  <div class="star-line">* . ﹢ ˖ ✦ ¸ . ﹢ ° ¸. ° ˖ ･ ·̩ ｡ ☆ ﾟ ＊ ¸* . ﹢ ˖ ✦ ¸ . ﹢ ° ¸. ° ˖ ･ ·̩ ｡ ☆ ﾟ ＊ ¸* . ﹢ ˖ ✦ ¸ . ﹢ ° ¸. ° ˖ ･ ·̩ ｡ ☆ ﾟ ＊ ¸</div>
 
-<section id="about">
-  <h2>About</h2>
-  <p>
-    This project develops an AI literacy toolkit centered on a curated knowledge base &mdash; a structured corpus of readings, annotations, and concepts that frames AI as an infrastructural system spanning material resources, data ecosystems, governance, and lived experience.
-  </p>
-  <p>
-    Using this corpus as grounding context, the project explores how LLMs can function as tools for structuring, translating, and interrogating complex material. The outcome is both a designed knowledge base usable by students working with LLM tools, and a teaching toolkit that translates critical scholarship into assignments, modules, and workflows.
-  </p>
-  <p>
-    The corpus is plain text, model-agnostic, and open. It can be dropped into any LLM as context, deposited to SOAR, or used as a standalone research archive.
-  </p>
-</section>
+
+  <section id="about" style="margin-top: 40px;">
+    <h2>About</h2>
+    <p>
+      This project develops an AI literacy toolkit centered on a curated knowledge base &mdash; a structured corpus of readings, annotations, and concepts that frames AI as an infrastructural system spanning material resources, data ecosystems, governance, and lived experience.
+    </p>
+    <p>
+      Using this corpus as grounding context, the project explores how LLMs can function as tools for structuring, translating, and interrogating complex material. The outcome is both a designed knowledge base usable by students working with LLM tools, and a teaching toolkit that translates critical scholarship into assignments, modules, and workflows.
+    </p>
+    <p>
+      The corpus is plain text, model-agnostic, and open.
+    </p>
+  </section>
+</div>
+
+<div class="col-right" style="padding-top: 220px;">
 
 <section id="materials">
   <h2>Materials</h2>
   <ul class="nav-links">
     <li>
       <a href="syllabus.html">
-        <span class="link-label">Syllabus &mdash; Course structure, learning objectives, week-by-week schedule</span>
+        <span class="link-label">Syllabus</span>
         <span class="link-arrow">[placeholder] &rarr;</span>
       </a>
     </li>
     <li>
       <a href="assignments.html">
-        <span class="link-label">Assignments &mdash; 3&ndash;5 critical design exercises and mapping projects</span>
+        <span class="link-label">Assignments</span>
         <span class="link-arrow">[placeholder] &rarr;</span>
       </a>
     </li>
     <li>
       <a href="#corpus-download">
-        <span class="link-label">Corpus Download &mdash; Full plain-text knowledge base, 57 sources</span>
+        <span class="link-label">Corpus Download</span>
         <span class="link-arrow">[.txt] &darr;</span>
       </a>
     </li>
@@ -379,6 +426,9 @@
 <footer>
   <p>Tandis Shoushtary &nbsp;&middot;&nbsp; 2026 &nbsp;&middot;&nbsp; Released for open educational use</p>
 </footer>
+
+</div><!-- col-right -->
+</div><!-- page-layout -->
 
 <script>
 const sources = [
