@@ -1,0 +1,1022 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Syllabus — Designing AI Literacy Through Infrastructure</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #f5f4f0;
+    --fg: #1a1a1a;
+    --dim: #666;
+    --accent: #1a1a1a;
+    --border: #ccc;
+  }
+
+  @keyframes hueshift {
+    0%   { background-color: #f2f0e8; }
+    16%  { background-color: #e8f2ec; }
+    33%  { background-color: #e8ecf2; }
+    50%  { background-color: #f0e8f2; }
+    66%  { background-color: #f2e8e8; }
+    83%  { background-color: #f2ede6; }
+    100% { background-color: #f2f0e8; }
+  }
+
+  body {
+    background: #f2f0e8;
+    animation: hueshift 30s ease-in-out infinite;
+    color: var(--fg);
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 14px;
+    line-height: 1.7;
+    padding: 60px 40px 120px;
+    max-width: 860px;
+    margin: 0 auto;
+  }
+
+  pre, code { font-family: inherit; }
+
+  a { color: var(--fg); }
+  a:hover { text-decoration: none; }
+
+  .ascii-banner {
+    font-size: 11px;
+    line-height: 1.2;
+    color: var(--dim);
+    margin-bottom: 24px;
+    white-space: pre;
+  }
+
+  h1 {
+    font-size: 18px;
+    font-weight: normal;
+    letter-spacing: 0.02em;
+    margin-bottom: 8px;
+  }
+
+  .subtitle {
+    color: var(--dim);
+    margin-bottom: 16px;
+  }
+
+  .star-line {
+    font-size: 11px;
+    color: var(--dim);
+    margin: 12px 0 48px;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+
+  .nav-back {
+    font-size: 12px;
+    color: var(--dim);
+    margin-bottom: 48px;
+    display: block;
+  }
+
+  /* ── SECTIONS ── */
+  section {
+    margin-bottom: 56px;
+  }
+
+  h2 {
+    font-size: 12px;
+    font-weight: normal;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--dim);
+    margin-bottom: 20px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  h3 {
+    font-size: 12px;
+    font-weight: normal;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--dim);
+    margin: 28px 0 12px;
+  }
+
+  p {
+    margin-bottom: 14px;
+    max-width: 660px;
+    color: var(--dim);
+  }
+
+  ul, ol {
+    padding-left: 18px;
+    margin-bottom: 14px;
+    max-width: 660px;
+  }
+
+  li {
+    margin-bottom: 6px;
+    color: var(--dim);
+  }
+
+  li::marker { color: var(--border); }
+
+  strong { color: var(--fg); font-weight: normal; }
+
+  /* ── THEME GRID ── */
+  .theme-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    margin-bottom: 28px;
+    max-width: 660px;
+  }
+
+  .theme-card {
+    background: #fff;
+    padding: 16px 18px;
+  }
+
+  .theme-number {
+    font-size: 10px;
+    color: var(--border);
+    letter-spacing: 0.1em;
+    margin-bottom: 4px;
+  }
+
+  .theme-name {
+    font-size: 13px;
+    color: var(--fg);
+    margin-bottom: 6px;
+  }
+
+  .theme-desc {
+    font-size: 11px;
+    color: var(--dim);
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  /* ── GRADE BREAKDOWN ── */
+  .grade-table {
+    max-width: 660px;
+  }
+
+  .grade-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+    color: var(--dim);
+    gap: 16px;
+  }
+
+  .grade-pct {
+    color: var(--fg);
+    white-space: nowrap;
+  }
+
+  /* ── SCHEDULE ── */
+  .schedule-item {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    border-bottom: 1px solid var(--border);
+    padding: 14px 0;
+    gap: 20px;
+    max-width: 760px;
+  }
+
+  .schedule-item:first-of-type {
+  }
+
+  .week-label {
+    font-size: 11px;
+    color: var(--dim);
+    padding-top: 2px;
+  }
+
+  .week-label strong {
+    display: block;
+    font-size: 13px;
+    color: var(--fg);
+    margin-bottom: 1px;
+  }
+
+  .week-content .week-title {
+    font-size: 13px;
+    color: var(--fg);
+    margin-bottom: 4px;
+  }
+
+  .week-content .week-desc {
+    font-size: 12px;
+    color: var(--dim);
+    margin-bottom: 6px;
+    line-height: 1.65;
+    max-width: 560px;
+  }
+
+  .week-readings {
+    font-size: 11px;
+    color: var(--dim);
+    border-left: 2px solid var(--border);
+    padding-left: 10px;
+    line-height: 1.65;
+    margin-bottom: 6px;
+    max-width: 540px;
+  }
+
+  .week-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 6px;
+  }
+
+  .wtag {
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    border: 1px solid var(--border);
+    color: var(--dim);
+    padding: 2px 8px;
+  }
+
+  .wtag.assign { border-color: var(--fg); color: var(--fg); }
+  .wtag.mid { border-color: #999; color: #999; }
+  .wtag.final { border-color: #777; color: #777; }
+
+  /* ── ASSIGNMENT BLOCKS ── */
+  .assignment {
+    margin-bottom: 40px;
+    padding-top: 20px;
+    max-width: 700px;
+  }
+
+  .assignment-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .a-label {
+    font-size: 11px;
+    color: var(--dim);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 2px;
+  }
+
+  .a-title {
+    font-size: 15px;
+    color: var(--fg);
+  }
+
+  .a-due {
+    font-size: 11px;
+    color: var(--dim);
+    letter-spacing: 0.06em;
+    white-space: nowrap;
+  }
+
+  .a-section {
+    font-size: 11px;
+    color: var(--dim);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin: 20px 0 8px;
+  }
+
+  .a-section:first-of-type { margin-top: 0; }
+
+  .a-grade-table {
+    width: 100%;
+    max-width: 500px;
+    border-collapse: collapse;
+    font-size: 12px;
+    color: var(--dim);
+    margin-top: 8px;
+  }
+
+  .a-grade-table tr { border-bottom: 1px solid var(--border); }
+  .a-grade-table tr:last-child { border-bottom: none; }
+  .a-grade-table td { padding: 6px 0; }
+  .a-grade-table td:last-child { text-align: right; color: var(--fg); }
+
+  /* ── MIDTERM / FINAL HEADER ── */
+  .assignment.midterm .a-label { color: var(--fg); }
+  .assignment.final-proj .a-label { color: var(--fg); }
+
+  /* ── FINAL TIMELINE ── */
+  .f-timeline {
+    border-top: 1px solid var(--border);
+    margin: 12px 0 20px;
+    max-width: 600px;
+  }
+
+  .f-row {
+    display: grid;
+    grid-template-columns: 60px 180px 1fr;
+    border-bottom: 1px solid var(--border);
+    font-size: 12px;
+    color: var(--dim);
+  }
+
+  .f-row.header {
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--border);
+  }
+
+  .f-row > div { padding: 8px 0 8px 0; }
+  .f-row > div:not(:last-child) { padding-right: 16px; }
+
+  /* ── SHOW & TELL ── */
+  .show-tell-box {
+    background: #fff;
+    border: 1px solid var(--border);
+    padding: 24px;
+    margin-bottom: 0;
+    max-width: 700px;
+  }
+
+  /* ── BIBLIOGRAPHY ── */
+  .bib-list {
+    list-style: none;
+    padding: 0;
+    max-width: 660px;
+  }
+
+  .bib-list li {
+    border-bottom: 1px solid var(--border);
+    padding: 8px 0;
+    font-size: 12px;
+    color: var(--dim);
+    margin: 0;
+  }
+
+  .bib-list li:first-child { border-top: 1px solid var(--border); }
+
+  /* ── FOOTER ── */
+  footer {
+    margin-top: 80px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+    font-size: 11px;
+    color: var(--dim);
+  }
+
+  @media (max-width: 600px) {
+    body { padding: 32px 20px 80px; }
+    .theme-grid { grid-template-columns: 1fr; }
+    .schedule-item { grid-template-columns: 1fr; gap: 4px; }
+    .f-row { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<a class="nav-back" href="https://silktabrizrug.github.io/ai-literacy-thru-infrastructure/">← ai literacy through infrastructure</a>
+
+<div class="ascii-banner">+----------------------------------+
+| hardware → software → society    |
++----------------------------------+</div>
+
+<h1>Designing AI Literacy Through Infrastructure</h1>
+<p class="subtitle">Syllabus — 17 Weeks</p>
+<div class="star-line">* . ﹢ ˖ ✦ ¸ . ﹢ ° ¸. ° ˖ ･ ·̩ ｡ ☆ ﾟ ＊ ¸* . ﹢ ˖ ✦ ¸ . ﹢ ° ¸. ° ˖ ･ ·̩ ｡ ☆ ﾟ ＊ ¸* . ﹢ ˖ ✦ ¸ . ﹢ ° ¸. ° ˖ ･ ·̩ ｡ ☆ ﾟ ＊ ¸</div>
+
+<!-- ── ABOUT ── -->
+<section id="about">
+  <h2>About</h2>
+  <p>This course teaches AI literacy through infrastructure. Rather than treating AI as an abstract or inevitable technology, students learn to see it as a system built on physical materials, economic relations, governance decisions, and social choices — all of which can be studied, questioned, and contested.</p>
+  <p>Moving through four thematic layers — from mines and data centers to platform ecosystems, policy regimes, and the people AI most affects — students develop the conceptual vocabulary and critical tools to analyze AI wherever they encounter it. No coding required. Some discomfort expected.</p>
+
+  <h3>Thematic Architecture</h3>
+  <div class="theme-grid">
+    <div class="theme-card">
+      <div class="theme-number">layer 01</div>
+      <div class="theme-name">Material Infrastructure</div>
+      <p class="theme-desc">Mines, data centers, undersea cables, energy, supply chains, planetary costs.</p>
+    </div>
+    <div class="theme-card">
+      <div class="theme-number">layer 02</div>
+      <div class="theme-name">Data & Platform Ecosystems</div>
+      <p class="theme-desc">Classification systems, training data, linguistic bias, platform power, algorithmic displacement.</p>
+    </div>
+    <div class="theme-card">
+      <div class="theme-number">layer 03</div>
+      <div class="theme-name">Governance & Regulation</div>
+      <p class="theme-desc">AI policy, open vs. proprietary models, digital sovereignty, labor law, archival control.</p>
+    </div>
+    <div class="theme-card">
+      <div class="theme-number">layer 04</div>
+      <div class="theme-name">Social / User Infrastructure</div>
+      <p class="theme-desc">Borders, bodies, surveillance, adversarial design, tech labor, Global South users.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ── OUTCOMES ── -->
+<section id="outcomes">
+  <h2>Course Outcomes</h2>
+  <ul>
+    <li>Recognize AI as infrastructure — a system with physical, economic, and political dimensions — rather than a neutral or magical technology.</li>
+    <li>Apply a four-layer framework (material / data / governance / social) to analyze any AI system critically.</li>
+    <li>Trace the supply chains, labor conditions, and governance structures that underlie AI products students encounter every day.</li>
+    <li>Evaluate claims made about AI — in the news, by companies, in policy — using primary sources and scholarly frameworks.</li>
+    <li>Produce original analysis of an AI system, dataset, or platform using methods learned in the course.</li>
+    <li>Situate AI within histories of colonialism, labor, and infrastructure, and identify who benefits and who bears the costs.</li>
+  </ul>
+</section>
+
+<!-- ── WORKING AGREEMENT ── -->
+<section id="agreement">
+  <h2>Working Agreement</h2>
+  <p><strong>No technical background required.</strong> This is a critical studies course. What matters is careful reading, honest thinking, and willingness to question things that seem obvious.</p>
+  <p><strong>On using AI tools.</strong> You may use AI tools in this course. But the course is about AI — so every time you use one, you are using the object of study. You will be asked to reflect on those uses explicitly.</p>
+  <p><strong>Primary sources over summaries.</strong> Read the actual texts. They are stranger, more specific, and more useful than any summary.</p>
+  <p><strong>Disagreement is productive.</strong> The readings do not always agree with each other. Neither do the scholars cited. Neither will you. That tension is the work.</p>
+</section>
+
+<!-- ── GRADES ── -->
+<section id="grades">
+  <h2>Grade Breakdown</h2>
+  <div class="grade-table">
+    <div class="grade-row"><span>Show & Tell presentations</span><span class="grade-pct">10%</span></div>
+    <div class="grade-row"><span>Assignments 1–5</span><span class="grade-pct">30%</span></div>
+    <div class="grade-row"><span>Midterm — Infrastructure Analysis</span><span class="grade-pct">25%</span></div>
+    <div class="grade-row"><span>Final — Critical AI Portfolio</span><span class="grade-pct">35%</span></div>
+  </div>
+</section>
+
+<!-- ── SHOW & TELL ── -->
+<section id="show-tell">
+  <h2>🧸 Show & Tell</h2>
+  <div class="show-tell-box">
+    <p class="a-section">Your Goal</p>
+    <p>Each week, 1–2 students share a 5–8 minute presentation at the start of class. Bring something that helps us think about AI as infrastructure — a news story, a dataset, a photograph, a policy document, a visualization, a product, a zine. It does not have to be academic. It has to be specific and connected to what we're reading.</p>
+
+    <p class="a-section" style="margin-top:16px;">Instructions</p>
+    <ul>
+      <li>Show us a specific artifact — not a topic in general, but a particular thing.</li>
+      <li>Explain what it is, who made it, and who it affects.</li>
+      <li>Connect it to the week's thematic layer.</li>
+      <li>End with one question for the class.</li>
+    </ul>
+
+    <p class="a-section" style="margin-top:16px;">Examples to pick from (or bring your own)</p>
+    <p><strong>Infrastructure objects:</strong> an undersea cable map, a data center's water usage disclosure, a coltan mine photograph, a GPU shortage news story, an AWS outage post-mortem</p>
+    <p><strong>Policy artifacts:</strong> EU AI Act provisions, Peru's Free Software Bill, the UVA Archival AI Protocol, an EEOC guidance on AI hiring tools</p>
+    <p><strong>Practitioner work:</strong> Forensic Architecture, Stop LAPD Spying Coalition's Algorithmic Ecology, Estampa's Cartography of Generative AI, the Bits in the Machine zine, Rest of World reporting</p>
+    <p><strong>AI products:</strong> a content moderation decision you disagree with, an AI-generated image and its prompt, an LLM response on a sensitive topic in two different languages</p>
+  </div>
+</section>
+
+<!-- ── SCHEDULE ── -->
+<section id="schedule">
+  <h2>🗓️ Schedule</h2>
+
+  <div class="schedule-item">
+    <div class="week-label"><strong>Week 1</strong></div>
+    <div class="week-content">
+      <div class="week-title">Introduction — What Is Infrastructure? Reframing AI</div>
+      <div class="week-desc">What does it mean to treat AI as infrastructure rather than technology? Course overview and introduction to the four-layer framework. In-class: find an AI system in your daily life and identify one thing you don't know about how it works.</div>
+      <div class="week-readings">Star (1999) "The Ethnography of Infrastructure" · Crawford (2021) Atlas of AI, Introduction · Estampa (2023) Cartography of Generative AI (browse the site)</div>
+      <div class="week-tags"><span class="wtag assign">Assignment 1 Out</span></div>
+    </div>
+  </div>
+
+  <div class="schedule-item">
+    <div class="week-label"><strong>Week 2</strong></div>
+    <div class="week-content">
+      <div class="week-title">Fundamentals — Classification, Standards, and Power</div>
+      <div class="week-desc">Infrastructure is not just physical — it's categorical. Who decides what categories exist, and whose lives get sorted into which boxes? Introduction to Bowker and Star's framework for thinking about classification as infrastructure.</div>
+      <div class="week-readings">Bowker & Star (1999) Sorting Things Out, Ch. 1 & 6 · Christin (2020) "The Ethnographer and the Algorithm"</div>
+      <div class="week-tags"><span class="wtag assign">Assignment 1 Due</span><span class="wtag assign">Assignment 2 Out</span></div>
+    </div>
+  </div>
+
+  <div class="schedule-item">
+    <div class="week-label"><strong>Week 3</strong></div>
+    <div class="week-content">
+      <div class="week-title">Layer 01 — Material Infrastructure: The Cloud Is a Factory</div>
+      <div class="week-desc">AI runs on something physical. This week we follow that something: the mines, the cables, the data centers, the energy grids, and the carbon. What does it cost to run a model, and who pays?</div>
+      <div class="week-readings">Ensmenger (2021) "The Cloud Is a Factory" · Starosielski (2015) The Undersea Network, Ch. 1 · AI Now Institute (2023) Climate Justice & Labor Rights, Part I</div>
+      <div class="week-tags"><span class="wtag assign">Assignment 2 Due</span><span class="wtag assign">Assignment 3 Out</span></div>
+    </div>
+  </div>
+
+  <div class="schedule-item">
+    <div class="week-label"><strong>Week 4</strong></div>
+    <div class="week-content">
+      <div class="week-title">Layer 01 (cont.) — Planetary Costs and Colonial Extraction</div>
+      <div class="week-desc">The material footprint of AI is unevenly distributed. This week we examine how digital infrastructure reproduces colonial patterns of extraction — who provides the minerals, who hosts the cables, who absorbs the energy costs.</div>
+      <div class="week-readings">Crawford (2021) Atlas of AI, Ch. 1–2 · Kwet (2022) "Digital Colonialism and Infrastructure-as-Debt" · Masco (2010) "Bad Weather: On Planetary Crisis" (selections)</div>
+    </div>
+  </div>
+
+  <div class="schedule-item">
+    <div class="week-label"><strong>Week 5</strong></div>
+    <div class="week-content">
+      <div class="week-title">Layer 02 — Data & Platforms: Who Gets Counted?</div>
+      <div class="week-desc">AI learns from data. But data is never neutral — it reflects the choices, biases, and power of whoever collected it. This week we examine how training data encodes worldviews and whose knowledge gets treated as ground truth.</div>
+      <div class="week-readings">Couldry & Mejias (2019) The Costs of Connection, Introduction · Flensburg & Lai (2023) "Follow the Data!" · Rikap (2021) Capitalism, Power and Innovation, selections</div>
+      <div class="week-tags"><span class="wtag assign">Assignment 3 Due</span><span class="wtag assign">Assignment 4 Out</span></div>
+    </div>
+  </div>
+
+  <div class="schedule-item">
+    <div class="week-label"><strong>Week 6</strong></div>
+    <div class="week-content">
+      <div class="week-title">Layer 02 (cont.) — Language, Bias, and the Global Corpus</div>
+      <div class="week-desc">Most AI is built on English-dominant data. What happens to speakers of other languages? This week focuses on linguistic bias, low-resource language exclusion, and what it means when an AI doesn't speak your language — or speaks it badly.</div>
+      <div class="week-readings">Agarwal et al. (2025) "AI Suggestions Homogenize Writing" · Zaugg et al. (2022) "Digitally-Disadvantaged Languages" · Pakzad (2021) "Gazing at the Mother Tongue" · AI Governance Beyond English</div>
+    </div>
+  </div>
+
+  <div class="schedule-item">
+    <div class="week-label"><strong>Week 7</strong></div>
+    <div class="week-content">
+      <div class="week-title">Layer 02 (cont.) — Algorithms, Platforms, and Influence</div>
+      <div class="week-desc">Platform algorithms don't just reflect public opinion — they shape it. This week we examine how recommendation systems, ad-targeting infrastructure, and content moderation operate as political infrastructure.</div>
+      <div class="week-readings">Laufer & Nissenbaum (2023) "Algorithmic Displacement of Social Trust" · Nadler & Donovan (2018) "Weaponizing the Digital Influence Machine" · Tang et al. (2025) "Ads that Talk Back"</div>
+      <div class="week-tags"><span class="wtag assign">Assignment 4 Due</span></div>
+    </div>
+  </div>
+
+  <div class="schedule-item">
+    <div class="week-label"><strong>Week 8</strong></div>
+    <div class="week-content">
+      <div class="week-title">Midterm Workshop</div>
+      <div class="week-desc">In-class workshop: students share midterm projects in progress and receive peer feedback. What argument is your analysis making? What evidence is it using? What is it missing?</div>
+      <div class="week-readings">No new readings — bring your draft.</div>
+      <div class="week-tags"><span class="wtag mid">Midterm Due</span></div>
+    </div>
+  </div>
+
+  <div class="schedule-item">
+    <div class="week-label"><strong>Week 9</strong></div>
+    <div class="week-content">
+      <div class="week-title">Midterm Presentations</div>
+      <div class="week-desc">Students present their infrastructure analyses. Discussion structured around: what does the analysis reveal? What does the four-layer framework make visible — and what does it obscure?</div>
+      <div class="week-tags"><span class="wtag mid">Midterm Presentations</span></div>
+    </div>
+  </div>
+
+  <div class="schedule-item">
+    <div class="week-label"><strong>Week 10</strong></div>
+    <div class="week-content">
+      <div class="week-title">Layer 03 — Governance & Regulation: Who Controls the Stack?</div>
+      <div class="week-desc">AI is not ungoverned — it is governed by whoever has the power to set the terms. This week we examine AI policy, digital sovereignty, and the political struggle over who controls foundational infrastructure.</div>
+      <div class="week-readings">Chan (2004) "Coding Free States" · AI Now Institute (2025) Artificial Power Landscape Report · Katz (2020) Artificial Whiteness, Ch. 1</div>
+      <div class="week-tags"><span class="wtag assign">Assignment 5 Out</span></div>
+    </div>
+  </div>
+
+  <div class="schedule-item">
+    <div class="week-label"><strong>Week 11</strong></div>
+    <div class="week-content">
+      <div class="week-title">Layer 03 (cont.) — Openness, Access, and Alternatives</div>
+      <div class="week-desc">What would it mean for AI infrastructure to be publicly controlled? This week looks at open-source movements, commons-based alternatives, and the politics of who gets to access, audit, or challenge AI systems.</div>
+      <div class="week-readings">McCarthy (2015) "Toward a Free Information Movement" · Kwet (2022) "The Digital Tech Deal" · Lo (2026) UVA Archival AI Protocol · Pakzad (2020) "Developers, Choose Wisely"</div>
+    </div>
+  </div>
+
+  <div class="schedule-item">
+    <div class="week-label"><strong>Week 12</strong></div>
+    <div class="week-content">
+      <div class="week-title">Layer 04 — Social Infrastructure: Bodies, Borders, and Surveillance</div>
+      <div class="week-desc">AI shapes who can move, who gets credit, who gets hired, who gets surveilled. This week we look at how AI operates as social infrastructure — infrastructures that govern bodies, identity, and access.</div>
+      <div class="week-readings">Akbari (2025) "The Birth of Code/Body" · Stop LAPD Spying Coalition (2020) "The Algorithmic Ecology" · McIntyre et al. (2026) "Gig Workers in Africa Have Been Helping the US Military"</div>
+    </div>
+  </div>
+
+  <div class="schedule-item">
+    <div class="week-label"><strong>Week 13</strong></div>
+    <div class="week-content">
+      <div class="week-title">Layer 04 (cont.) — Labor, Resistance, and the Global User</div>
+      <div class="week-desc">Who builds AI, who maintains it, and who resists? This week examines tech labor conditions, collective organizing, and the populations that dominant AI narratives consistently misrepresent or ignore.</div>
+      <div class="week-readings">Arora (2019) The Next Billion Users, Introduction · Tech Workers Coalition (2026) "Why Tech Workers Coalition?" · Bits in the Machine Zine (2024, browse)</div>
+      <div class="week-tags"><span class="wtag assign">Assignment 5 Due</span></div>
+    </div>
+  </div>
+
+  <div class="schedule-item">
+    <div class="week-label"><strong>Week 14</strong></div>
+    <div class="week-content">
+      <div class="week-title">Critique — What AI Produces: Aesthetics, Knowledge, Skill</div>
+      <div class="week-desc">What does AI actually make? This week we examine the cultural outputs of AI systems — homogenized visual culture, generic writing, degraded skill formation — and ask what it means when infrastructure shapes what knowledge and creativity look like.</div>
+      <div class="week-readings">Meyer (2025) "Platform Realism" · Agarwal et al. (2025) "AI Suggestions Homogenize Writing" · Shen & Tamkin (2026) "How AI Impacts Skill Formation" · Shojaee et al. (2025) "The Illusion of Thinking"</div>
+    </div>
+  </div>
+
+  <div class="schedule-item">
+    <div class="week-label"><strong>Week 15</strong></div>
+    <div class="week-content">
+      <div class="week-title">AI Literacy — Who Defines It and Who Benefits?</div>
+      <div class="week-desc">The course has been building toward this question. What counts as AI literacy, who gets to define it, and who is excluded by dominant frameworks? We end by turning the course's critical lens on itself.</div>
+      <div class="week-readings">Oduro & Akanegbu "404: Job Not Found" · Prol (2026) "AI Can't Add Flavor to Computing Education" · DiSalvo (2012) Adversarial Design, Ch. 1</div>
+    </div>
+  </div>
+
+  <div class="schedule-item">
+    <div class="week-label"><strong>Week 16</strong></div>
+    <div class="week-content">
+      <div class="week-title">Final Project Workshop</div>
+      <div class="week-desc">Peer review of final project drafts. Students exchange work and give structured written feedback. Focus: does the analysis hold together? Is the argument supported by specific evidence from readings and research?</div>
+      <div class="week-readings">No new readings — bring your draft.</div>
+    </div>
+  </div>
+
+  <div class="schedule-item" style="border-bottom: none;">
+    <div class="week-label"><strong>Week 17</strong></div>
+    <div class="week-content">
+      <div class="week-title">Final Presentations</div>
+      <div class="week-desc">Students present completed Critical AI Portfolios. Open discussion and course closing.</div>
+      <div class="week-tags"><span class="wtag final">Final Due</span><span class="wtag final">Final Presentations</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ── ASSIGNMENTS ── -->
+<section id="assignments">
+  <h2>Assignments</h2>
+
+  <!-- A1 -->
+  <div class="assignment">
+    <div class="assignment-header">
+      <div>
+        <div class="a-label">Assignment 1</div>
+        <div class="a-title">"Infrastructure Autopsy"</div>
+      </div>
+      <div class="a-due">due: week 2</div>
+    </div>
+
+    <p class="a-section">Your Goal</p>
+    <p>Choose one AI system you actually use or encounter — a search engine, a feed algorithm, a chatbot, a hiring tool, a content filter — and dissect it. Not what it does on the surface, but what it runs on. You are not analyzing the interface. You are analyzing the infrastructure.</p>
+
+    <p class="a-section">Instructions</p>
+    <ul>
+      <li>Choose one AI system and research each of the four layers:
+        <ul style="margin-top:6px;">
+          <li><strong>Material:</strong> What hardware does it run on? Where? What energy does it use?</li>
+          <li><strong>Data:</strong> What was it trained on? By whom? Under what conditions?</li>
+          <li><strong>Governance:</strong> Who owns it? What terms govern its use? Who was excluded from those decisions?</li>
+          <li><strong>Social:</strong> Who uses it? Who is harmed by it? What labor sustains it?</li>
+        </ul>
+      </li>
+      <li>Create a hand-drawn or digital infrastructure map showing how the four layers connect.</li>
+      <li>Write a 300–400 word autopsy: what did you find? What surprised you? What couldn't you find out, and why?</li>
+    </ul>
+
+    <p class="a-section">Deliverable</p>
+    <p>Infrastructure map + written autopsy. Submit as PDF.</p>
+
+    <p class="a-section">Grading</p>
+    <table class="a-grade-table">
+      <tr><td>Depth of research across all four layers</td><td>40%</td></tr>
+      <tr><td>Clarity and insight of the infrastructure map</td><td>30%</td></tr>
+      <tr><td>Quality of written autopsy</td><td>30%</td></tr>
+    </table>
+  </div>
+
+  <!-- A2 -->
+  <div class="assignment">
+    <div class="assignment-header">
+      <div>
+        <div class="a-label">Assignment 2</div>
+        <div class="a-title">"Follow the Data"</div>
+      </div>
+      <div class="a-due">due: week 3</div>
+    </div>
+
+    <p class="a-section">Your Goal</p>
+    <p>Pick one dataset that was used to train a real AI system and trace where it came from. Data doesn't appear from nowhere — it is collected, curated, annotated, and cleaned by people, usually under conditions that are invisible to the end user. Your job is to make those conditions visible.</p>
+
+    <p class="a-section">Choose One</p>
+    <ul>
+      <li>A large public training dataset (e.g. Common Crawl, LAION-5B, ImageNet, C4, BookCorpus)</li>
+      <li>A dataset used in a specific commercial AI system (e.g. Stable Diffusion, GPT-4)</li>
+      <li>A civic AI dataset (e.g. one used in predictive policing, benefits screening, or hiring)</li>
+    </ul>
+
+    <p class="a-section">Instructions</p>
+    <ul>
+      <li>Research the dataset's provenance: where was the data collected from? Who collected it? Were the sources consented?</li>
+      <li>Research the labor: who annotated, cleaned, or labeled it? Where? Under what pay and conditions?</li>
+      <li>Research the representation: what languages, communities, and viewpoints are over- or under-represented? What was excluded?</li>
+      <li>Create a supply chain diagram showing the journey from raw data to deployed model. At least 5 nodes.</li>
+      <li>Write a 400–500 word analysis drawing on at least two readings from the course.</li>
+    </ul>
+
+    <p class="a-section">Deliverable</p>
+    <p>Supply chain diagram + written analysis. Submit as PDF.</p>
+
+    <p class="a-section">Grading</p>
+    <table class="a-grade-table">
+      <tr><td>Accuracy and depth of provenance research</td><td>35%</td></tr>
+      <tr><td>Supply chain diagram clarity</td><td>25%</td></tr>
+      <tr><td>Written analysis with course readings</td><td>40%</td></tr>
+    </table>
+  </div>
+
+  <!-- A3 -->
+  <div class="assignment">
+    <div class="assignment-header">
+      <div>
+        <div class="a-label">Assignment 3</div>
+        <div class="a-title">"Probe the Machine"</div>
+      </div>
+      <div class="a-due">due: week 5</div>
+    </div>
+
+    <p class="a-section">Your Goal</p>
+    <p>Run a structured experiment with an LLM. This course is about AI — so you should interact with it directly, critically, and carefully. You are not testing whether the AI is "good" or "bad." You are using it as a site of investigation: a system whose infrastructure, training data, and governance decisions become legible through its outputs.</p>
+
+    <p class="a-section">Instructions</p>
+    <ul>
+      <li>Choose one of the following experiment types:
+        <ul style="margin-top:6px;">
+          <li><strong>Language test:</strong> Ask the same substantive question in two or more languages. Compare the responses in depth — not just content, but tone, confidence, and what each version assumes about its audience.</li>
+          <li><strong>Bias probe:</strong> Ask an LLM about a topic where you suspect it has a particular default perspective (geopolitical, cultural, ideological). Push back. Examine what it does when challenged.</li>
+          <li><strong>Labor probe:</strong> Ask an LLM about its own training data, the people who labeled it, and the conditions under which it was built. Examine how it responds to questions about its own infrastructure.</li>
+        </ul>
+      </li>
+      <li>Document your experiment fully: save all prompts and responses verbatim.</li>
+      <li>Write a 500–600 word analysis: what does the experiment reveal about the system's underlying infrastructure — its training data, its governance choices, its assumptions about users?</li>
+      <li>Cite at least two course readings in your analysis.</li>
+    </ul>
+
+    <p class="a-section">Deliverable</p>
+    <p>Full experiment log (screenshots or copied text) + written analysis. Submit as PDF.</p>
+
+    <p class="a-section">Grading</p>
+    <table class="a-grade-table">
+      <tr><td>Rigor and specificity of experiment design</td><td>25%</td></tr>
+      <tr><td>Quality of documentation (full prompts and outputs)</td><td>25%</td></tr>
+      <tr><td>Depth of written analysis</td><td>35%</td></tr>
+      <tr><td>Integration of course readings</td><td>15%</td></tr>
+    </table>
+  </div>
+
+  <!-- A4 -->
+  <div class="assignment">
+    <div class="assignment-header">
+      <div>
+        <div class="a-label">Assignment 4</div>
+        <div class="a-title">"Read the Policy"</div>
+      </div>
+      <div class="a-due">due: week 7</div>
+    </div>
+
+    <p class="a-section">Your Goal</p>
+    <p>AI governance happens in documents: terms of service, acceptable use policies, regulatory filings, audit protocols, executive orders. These documents are dense, often deliberately vague, and full of choices that appear technical but are political. Your job is to read one carefully.</p>
+
+    <p class="a-section">Choose One</p>
+    <ul>
+      <li>The terms of service or usage policy for a major AI product (OpenAI, Google, Meta, Anthropic, etc.)</li>
+      <li>A piece of AI legislation or regulatory guidance (EU AI Act provisions, EEOC guidance on AI hiring, NYC Local Law 144)</li>
+      <li>An internal AI governance document from a public institution (e.g. a university AI policy, the UVA Archival AI Protocol)</li>
+      <li>A corporate AI ethics statement or responsible AI framework</li>
+    </ul>
+
+    <p class="a-section">Instructions</p>
+    <ul>
+      <li>Read the document carefully and completely.</li>
+      <li>Annotate it: mark where power is concentrated, where accountability is absent, what is defined vs. left undefined, and who the document seems to protect.</li>
+      <li>Write a 500-word close reading that answers: what does this document do? Who made it, for whom, and what interests does it serve? What is conspicuously absent?</li>
+      <li>Cite at least two course readings.</li>
+    </ul>
+
+    <p class="a-section">Deliverable</p>
+    <p>Annotated document (as PDF with annotations) + written close reading.</p>
+
+    <p class="a-section">Grading</p>
+    <table class="a-grade-table">
+      <tr><td>Quality and specificity of annotation</td><td>30%</td></tr>
+      <tr><td>Depth of written close reading</td><td>40%</td></tr>
+      <tr><td>Integration of course readings</td><td>20%</td></tr>
+      <tr><td>Identification of what is absent</td><td>10%</td></tr>
+    </table>
+  </div>
+
+  <!-- A5 -->
+  <div class="assignment">
+    <div class="assignment-header">
+      <div>
+        <div class="a-label">Assignment 5</div>
+        <div class="a-title">"Adversarial Reading"</div>
+      </div>
+      <div class="a-due">due: week 13</div>
+    </div>
+
+    <p class="a-section">Your Goal</p>
+    <p>Drawing on DiSalvo's concept of adversarial design — design that makes conflict visible and produces political encounters — produce an adversarial reading of an AI product, system, or claim. This is not a balanced review. It is a deliberate, evidence-based critique that exposes something the system's designers or promoters would prefer to keep invisible.</p>
+
+    <p class="a-section">Instructions</p>
+    <ul>
+      <li>Choose one AI product, system, or public claim about AI (e.g. an AI company's safety commitments, a government's AI strategy, a product launch, a research result).</li>
+      <li>Apply the four-layer framework: what does each layer reveal that the surface presentation conceals?</li>
+      <li>Research it using primary sources — company filings, leaked documents, investigative journalism, academic studies, worker testimony — not just the company's own framing.</li>
+      <li>Produce an adversarial reading in a format of your choosing:
+        <ul style="margin-top:6px;">
+          <li>A written critical analysis (700–900 words)</li>
+          <li>An annotated visual (an ad, a product page, a press release — marked up with your analysis)</li>
+          <li>A counter-document (a rewritten terms of service, a shadow impact assessment, a dissenting policy brief)</li>
+        </ul>
+      </li>
+      <li>Include a 200-word methodological note explaining your sources, your approach, and what you couldn't verify.</li>
+    </ul>
+
+    <p class="a-section">Deliverable</p>
+    <p>Adversarial reading (in chosen format) + methodological note. Submit as PDF.</p>
+
+    <p class="a-section">Grading</p>
+    <table class="a-grade-table">
+      <tr><td>Quality and specificity of the critique</td><td>30%</td></tr>
+      <tr><td>Evidence: use of primary sources</td><td>30%</td></tr>
+      <tr><td>Application of four-layer framework</td><td>25%</td></tr>
+      <tr><td>Methodological note</td><td>15%</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- ── MIDTERM ── -->
+<section id="midterm">
+  <h2>🛠️ Midterm</h2>
+
+  <div class="assignment midterm">
+    <div class="assignment-header">
+      <div>
+        <div class="a-label">Midterm</div>
+        <div class="a-title">"Infrastructure Analysis"</div>
+      </div>
+      <div class="a-due">due: week 8 · presentations week 9</div>
+    </div>
+
+    <p class="a-section">Your Goal</p>
+    <p>Produce a complete, original infrastructure analysis of one AI system, platform, or dataset. This is an expanded, more rigorous version of Assignment 1 — but now informed by seven weeks of reading, discussion, and your follow-up work in Assignments 2–4. You should be able to say something specific, supported, and non-obvious about your subject.</p>
+
+    <p class="a-section">Instructions</p>
+    <ul>
+      <li>Choose an AI system, platform, or dataset that interests you. It can be something you analyzed before, or something new.</li>
+      <li>Apply all four layers of the infrastructure framework rigorously, using primary sources (company disclosures, investigative reporting, regulatory filings, academic studies) as well as course readings.</li>
+      <li>Write a 1,000–1,200 word analysis structured around a clear argument — not just a description of the four layers, but a claim about what those layers reveal together. What is the system's infrastructure concealing? Who does it serve? What conditions make it possible?</li>
+      <li>Include an infrastructure diagram (updated from or building on your Assignment 1 map).</li>
+      <li>Cite at least four course readings.</li>
+    </ul>
+
+    <p class="a-section">Midterm Presentation (Week 9)</p>
+    <ul>
+      <li>8–10 minute presentation of your analysis.</li>
+      <li>Walk us through your infrastructure diagram. State your argument clearly. What did you find that surprised you?</li>
+      <li>Peer feedback will focus on: is the argument legible? Is the evidence specific? What is the most important thing missing?</li>
+    </ul>
+
+    <p class="a-section">Grading</p>
+    <table class="a-grade-table">
+      <tr><td>Clarity and strength of central argument</td><td>25%</td></tr>
+      <tr><td>Depth and specificity of four-layer analysis</td><td>30%</td></tr>
+      <tr><td>Use of primary sources and course readings</td><td>25%</td></tr>
+      <tr><td>Infrastructure diagram</td><td>10%</td></tr>
+      <tr><td>Presentation</td><td>10%</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- ── FINAL ── -->
+<section id="final">
+  <h2>🚀 Final</h2>
+
+  <div class="assignment final-proj">
+    <div class="assignment-header">
+      <div>
+        <div class="a-label">Final Project</div>
+        <div class="a-title">"Critical AI Portfolio"</div>
+      </div>
+      <div class="a-due">due: week 17</div>
+    </div>
+
+    <p class="a-section">Your Goal</p>
+    <p>The final project is a Critical AI Portfolio: a collected body of original work that demonstrates your ability to analyze AI as infrastructure across multiple registers — technical, political, cultural, and social. It should be something you could show as evidence of what you know how to do.</p>
+
+    <p class="a-section">Final Timeline</p>
+    <div class="f-timeline">
+      <div class="f-row header"><div>week</div><div>focus</div><div>deliverable</div></div>
+      <div class="f-row"><div>13</div><div>Adversarial Reading</div><div>Assignment 5 Due</div></div>
+      <div class="f-row"><div>14</div><div>Portfolio drafting</div><div>Draft outline due</div></div>
+      <div class="f-row"><div>15</div><div>Peer workshop</div><div>Full draft for peer review</div></div>
+      <div class="f-row"><div>16</div><div>Revision</div><div>Final revisions</div></div>
+      <div class="f-row"><div>17</div><div>Final presentations</div><div>Complete portfolio due</div></div>
+    </div>
+
+    <p class="a-section">Portfolio Components</p>
+
+    <p><strong>1. Revised Infrastructure Analysis (from Midterm)</strong><br>
+    Substantially revised in response to feedback. Should demonstrate deepened research, a sharper argument, and more specific evidence than the midterm version.</p>
+
+    <p><strong>2. Adversarial Reading (Assignment 5, revised)</strong><br>
+    Revised and expanded based on peer and instructor feedback.</p>
+
+    <p><strong>3. One New Piece</strong><br>
+    Produce one additional original work in a format of your choosing:
+    </p>
+    <ul>
+      <li>A close reading of a policy document not covered in class (600–800 words)</li>
+      <li>An extended LLM experiment with analysis (building on Assignment 3)</li>
+      <li>A data supply chain analysis of a system not covered in previous assignments</li>
+      <li>A comparative analysis: two AI systems, the same four-layer framework, one argument about what the comparison reveals</li>
+    </ul>
+
+    <p><strong>4. Reflective Introduction (400–500 words)</strong><br>
+    An essay introducing the portfolio: what questions drove your work this semester? What did you learn to see that you couldn't see before? What do you still not know how to analyze?</p>
+
+    <p class="a-section">Final Presentation (Week 17)</p>
+    <ul>
+      <li>10–12 minutes. Walk us through your portfolio — not everything, but the thread that connects it.</li>
+      <li>State one thing you understand now that you didn't at the start of the semester. Be specific.</li>
+    </ul>
+
+    <p class="a-section">Grading</p>
+    <table class="a-grade-table">
+      <tr><td>Revised Infrastructure Analysis (depth, argument, evidence)</td><td>25%</td></tr>
+      <tr><td>Adversarial Reading (revised)</td><td>20%</td></tr>
+      <tr><td>New piece (originality, rigor, use of framework)</td><td>25%</td></tr>
+      <tr><td>Reflective introduction</td><td>15%</td></tr>
+      <tr><td>Final presentation</td><td>15%</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- ── BIBLIOGRAPHY ── -->
+<section id="bibliography">
+  <h2>Core Corpus (Selected)</h2>
+  <p>Full annotated bibliography available at <a href="https://silktabrizrug.github.io/ai-literacy-thru-infrastructure/">silktabrizrug.github.io/ai-literacy-thru-infrastructure</a> — download corpus_final.txt for all 57 sources with abstracts and thematic tags.</p>
+
+  <h3>Material Infrastructure</h3>
+  <ul class="bib-list">
+    <li>AI Now Institute. (2023). Climate justice and labor rights: AI supply chains.</li>
+    <li>Crawford, K. (2021). <em>Atlas of AI.</em> Yale University Press.</li>
+    <li>Ensmenger, N. (2021). The cloud is a factory. In <em>Your Computer Is on Fire.</em> MIT Press.</li>
+    <li>Estampa. (2023). Cartography of Generative AI. cartography-of-generative-ai.net</li>
+    <li>Kwet, M. (2022). Digital Colonialism and Infrastructure-as-Debt. SSRN.</li>
+    <li>Masco, J. (2010). Bad weather: On planetary crisis. <em>Public Culture.</em></li>
+    <li>McIntyre, N. et al. (2026). Gig workers in Africa have been helping the US military. <em>The Guardian.</em></li>
+    <li>Star, S. L. (1999). The ethnography of infrastructure. <em>American Behavioral Scientist.</em></li>
+    <li>Starosielski, N. (2015). <em>The Undersea Network.</em> Duke University Press.</li>
+  </ul>
+
+  <h3>Data & Platform Ecosystems</h3>
+  <ul class="bib-list">
+    <li>Agarwal, D. et al. (2025). AI suggestions homogenize writing toward Western styles. ACM.</li>
+    <li>Bowker, G. C. & Star, S. L. (1999). <em>Sorting Things Out.</em> MIT Press.</li>
+    <li>Christin, A. (2020). The ethnographer and the algorithm. <em>Theory and Society.</em></li>
+    <li>Couldry, N. & Mejias, U. A. (2019). <em>The Costs of Connection.</em> Stanford University Press.</li>
+    <li>Flensburg, S. & Lai, S. S. (2023). Follow the data! <em>Media and Communication.</em></li>
+    <li>Laufer, B. & Nissenbaum, H. (2023). Algorithmic displacement of social trust. Knight Institute.</li>
+    <li>Meyer, R. (2025). Platform realism. <em>Transbordeur.</em></li>
+    <li>Nadler, A. & Donovan, J. (2018). Weaponizing the digital influence machine.</li>
+    <li>Shojaee, P. et al. (2025). The illusion of thinking. Apple Research.</li>
+    <li>Tang, B. J. et al. (2025). Ads that talk back. arXiv.</li>
+    <li>Zaugg, I. et al. (2022). Digitally-disadvantaged languages. Alexander von Humboldt Institute.</li>
+  </ul>
+
+  <h3>Governance & Regulation</h3>
+  <ul class="bib-list">
+    <li>AI Now Institute. (2025). Artificial Power: 2025 Landscape Report.</li>
+    <li>Chan, A. (2004). Coding free software, coding free states. <em>Anthropological Quarterly.</em></li>
+    <li>Katz, Y. (2020). <em>Artificial Whiteness.</em> Columbia University Press.</li>
+    <li>Kwet, M. (2022). The Digital Tech Deal. <em>Race & Class.</em></li>
+    <li>Lo, L. (2026). The University of Virginia Archival AI Protocol. UVA LibraOpen.</li>
+    <li>McCarthy, M. T. (2015). Toward a free information movement. <em>Sociological Forum.</em></li>
+    <li>Pakzad, R. (2020). Developers, choose wisely.</li>
+  </ul>
+
+  <h3>Social / User Infrastructure</h3>
+  <ul class="bib-list">
+    <li>Akbari, A. (2025). The birth of Code/Body. Cambridge University Press.</li>
+    <li>Arora, P. (2019). <em>The Next Billion Users.</em> Harvard University Press.</li>
+    <li>Collective Action in Tech & DAIR Institute. (2024). Bits in the Machine (Zine).</li>
+    <li>DiSalvo, C. (2012). <em>Adversarial Design.</em> MIT Press.</li>
+    <li>Oduro, S. & Akanegbu, A. (404) Job Not Found.</li>
+    <li>Prol, D. (2026). AI can't add flavor to computing education.</li>
+    <li>Shen, J. H. & Tamkin, A. (2026). How AI impacts skill formation.</li>
+    <li>Stop LAPD Spying Coalition. (2020). The Algorithmic Ecology.</li>
+    <li>Tech Workers Coalition / Conjure Utopia. (2026). Why Tech Workers Coalition?</li>
+  </ul>
+</section>
+
+<footer>
+  <a href="https://silktabrizrug.github.io/ai-literacy-thru-infrastructure/">← ai literacy through infrastructure</a>
+</footer>
+
+</body>
+</html>
