@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Designing AI Literacy Through Infrastructure</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #f5f4f0;
+    --fg: #1a1a1a;
+    --dim: #666;
+    --accent: #1a1a1a;
+    --border: #ccc;
+    --tag-material: #d4e8d4;
+    --tag-data: #d4d4e8;
+    --tag-gov: #e8d4d4;
+    --tag-social: #e8e4d4;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 14px;
+    line-height: 1.7;
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 60px 24px 120px;
+  }
+
+  pre, code { font-family: inherit; }
+
+  /* ── HEADER ── */
+  .site-header {
+    margin-bottom: 60px;
+  }
+
+  .ascii-banner {
+    font-size: 11px;
+    line-height: 1.2;
+    color: var(--dim);
+    margin-bottom: 32px;
+    white-space: pre;
+    overflow-x: auto;
+  }
+
+  h1 {
+    font-size: 18px;
+    font-weight: normal;
+    letter-spacing: 0.02em;
+    margin-bottom: 8px;
+  }
+
+  .subtitle {
+    color: var(--dim);
+    margin-bottom: 24px;
+  }
+
+  .meta-line {
+    color: var(--dim);
+    font-size: 12px;
+    border-top: 1px solid var(--border);
+    padding-top: 12px;
+    margin-top: 12px;
+  }
+
+  /* ── SECTIONS ── */
+  section {
+    margin-bottom: 56px;
+  }
+
+  h2 {
+    font-size: 12px;
+    font-weight: normal;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--dim);
+    margin-bottom: 20px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  p {
+    margin-bottom: 14px;
+    max-width: 660px;
+  }
+
+  /* ── LINKS / NAV ── */
+  .nav-links {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .nav-links li {
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-links li:first-child {
+    border-top: 1px solid var(--border);
+  }
+
+  .nav-links a {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 14px 0;
+    color: var(--fg);
+    text-decoration: none;
+  }
+
+  .nav-links a:hover .link-label {
+    text-decoration: underline;
+  }
+
+  .link-label { flex: 1; }
+  .link-arrow { color: var(--dim); margin-left: 16px; white-space: nowrap; }
+
+  /* ── CORPUS BROWSER ── */
+  .filter-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+
+  .filter-btn {
+    background: none;
+    border: 1px solid var(--border);
+    font-family: inherit;
+    font-size: 11px;
+    padding: 4px 10px;
+    cursor: pointer;
+    color: var(--dim);
+    letter-spacing: 0.06em;
+  }
+
+  .filter-btn.active, .filter-btn:hover {
+    background: var(--fg);
+    color: var(--bg);
+    border-color: var(--fg);
+  }
+
+  .source-count {
+    font-size: 11px;
+    color: var(--dim);
+    margin-bottom: 16px;
+  }
+
+  .source-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .source-item {
+    border-bottom: 1px solid var(--border);
+    padding: 0;
+  }
+
+  .source-item:first-child {
+    border-top: 1px solid var(--border);
+  }
+
+  .source-toggle {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 14px 0;
+    cursor: pointer;
+    gap: 16px;
+  }
+
+  .source-toggle:hover .source-title {
+    text-decoration: underline;
+  }
+
+  .source-title {
+    flex: 1;
+    font-size: 13px;
+  }
+
+  .source-year {
+    color: var(--dim);
+    font-size: 11px;
+    white-space: nowrap;
+  }
+
+  .source-expand {
+    color: var(--dim);
+    font-size: 11px;
+    white-space: nowrap;
+    margin-left: 8px;
+    min-width: 12px;
+    text-align: right;
+  }
+
+  .source-detail {
+    display: none;
+    padding: 0 0 18px 0;
+  }
+
+  .source-detail.open {
+    display: block;
+  }
+
+  .source-author {
+    color: var(--dim);
+    font-size: 12px;
+    margin-bottom: 8px;
+  }
+
+  .source-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-bottom: 10px;
+  }
+
+  .tag {
+    font-size: 10px;
+    padding: 2px 7px;
+    letter-spacing: 0.05em;
+  }
+
+  .tag-material { background: var(--tag-material); }
+  .tag-data { background: var(--tag-data); }
+  .tag-gov { background: var(--tag-gov); }
+  .tag-social { background: var(--tag-social); }
+
+  .source-abstract {
+    font-size: 12px;
+    color: var(--dim);
+    margin-bottom: 6px;
+    max-width: 620px;
+  }
+
+  .source-why {
+    font-size: 12px;
+    color: var(--dim);
+    max-width: 620px;
+  }
+
+  .source-why::before {
+    content: '↳ ';
+    color: var(--fg);
+  }
+
+  /* ── DOWNLOAD ── */
+  .download-block {
+    border: 1px solid var(--border);
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .download-info { flex: 1; }
+  .download-info p { margin: 0; font-size: 12px; color: var(--dim); }
+  .download-info strong { font-size: 13px; color: var(--fg); display: block; margin-bottom: 4px; }
+
+  .download-btn {
+    background: var(--fg);
+    color: var(--bg);
+    border: none;
+    font-family: inherit;
+    font-size: 12px;
+    padding: 10px 18px;
+    cursor: pointer;
+    letter-spacing: 0.06em;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .download-btn:hover { opacity: 0.8; }
+
+  /* ── FOOTER ── */
+  footer {
+    margin-top: 80px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+    font-size: 11px;
+    color: var(--dim);
+  }
+
+  a { color: var(--fg); }
+  a:hover { text-decoration: none; }
+
+  .hidden { display: none !important; }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="ascii-banner">
++------------------------------------------------------------------+
+|  hardware --&gt; software --&gt; society                             |
+|  designing ai literacy through infrastructure                    |
++------------------------------------------------------------------+</div>
+
+  <h1>Designing AI Literacy Through Infrastructure</h1>
+  <p class="subtitle">A Designed Knowledge Base + Teaching Toolkit</p>
+  <p class="subtitle">Tandis Shoushtary &mdash; Capstone Project, 2026</p>
+  <div class="meta-line">
+    57 sources &nbsp;|&nbsp; 4 thematic clusters &nbsp;|&nbsp;
+    Material Infrastructure &middot; Data &amp; Platform Ecosystems &middot; Governance &amp; Regulation &middot; Social / User Infrastructure
+  </div>
+</header>
+
+<section id="about">
+  <h2>About</h2>
+  <p>
+    This project develops an AI literacy toolkit centered on a curated knowledge base &mdash; a structured corpus of readings, annotations, and concepts that frames AI as an infrastructural system spanning material resources, data ecosystems, governance, and lived experience.
+  </p>
+  <p>
+    Using this corpus as grounding context, the project explores how LLMs can function as tools for structuring, translating, and interrogating complex material. The outcome is both a designed knowledge base usable by students working with LLM tools, and a teaching toolkit that translates critical scholarship into assignments, modules, and workflows.
+  </p>
+  <p>
+    The corpus is plain text, model-agnostic, and open. It can be dropped into any LLM as context, deposited to SOAR, or used as a standalone research archive.
+  </p>
+</section>
+
+<section id="materials">
+  <h2>Materials</h2>
+  <ul class="nav-links">
+    <li>
+      <a href="syllabus.html">
+        <span class="link-label">Syllabus &mdash; Course structure, learning objectives, week-by-week schedule</span>
+        <span class="link-arrow">[placeholder] &rarr;</span>
+      </a>
+    </li>
+    <li>
+      <a href="assignments.html">
+        <span class="link-label">Assignments &mdash; 3&ndash;5 critical design exercises and mapping projects</span>
+        <span class="link-arrow">[placeholder] &rarr;</span>
+      </a>
+    </li>
+    <li>
+      <a href="#corpus-download">
+        <span class="link-label">Corpus Download &mdash; Full plain-text knowledge base, 57 sources</span>
+        <span class="link-arrow">[.txt] &darr;</span>
+      </a>
+    </li>
+  </ul>
+</section>
+
+<section id="corpus">
+  <h2>Corpus &mdash; 57 Sources</h2>
+
+  <div class="filter-bar">
+    <button class="filter-btn active" data-filter="all">All</button>
+    <button class="filter-btn" data-filter="material">Material Infrastructure</button>
+    <button class="filter-btn" data-filter="data">Data &amp; Platform Ecosystems</button>
+    <button class="filter-btn" data-filter="gov">Governance &amp; Regulation</button>
+    <button class="filter-btn" data-filter="social">Social / User Infrastructure</button>
+  </div>
+
+  <p class="source-count" id="source-count">Showing 57 sources</p>
+
+  <div class="source-list" id="source-list">
+  </div>
+</section>
+
+<section id="corpus-download">
+  <h2>Download</h2>
+  <div class="download-block">
+    <div class="download-info">
+      <strong>corpus_final.txt</strong>
+      <p>57 sources, plain text, model-agnostic. Each source includes thematic tags, a two-sentence abstract, and rationale for inclusion. Drop into any LLM as grounding context.</p>
+    </div>
+    <a class="download-btn" href="corpus_final.txt" download>Download .txt &darr;</a>
+  </div>
+</section>
+
+<footer>
+  <p>Tandis Shoushtary &nbsp;&middot;&nbsp; 2026 &nbsp;&middot;&nbsp; Released for open educational use</p>
+</footer>
+
+<script>
+const sources = [
+  {"SOURCE":"AIGovernanceEnglish","TITLE":"AI Governance Beyond English: Low-Resource Lessons","AUTHOR":"","YEAR":"","THEMES":"Governance & Regulation | Data & Platform Ecosystems","ABSTRACT":"Argues that AI governance frameworks built primarily in English reproduce cultural bias and historical distortion when applied to low-resource languages, making linguistic representation a core governance challenge.","WHY INCLUDED":"Bridges governance and data infrastructure themes by showing how language exclusion operates structurally, useful for teaching students that AI policy is itself a site of power."},
+  {"SOURCE":"AILiteracyPart","TITLE":"AI Literacy Part 1 — Where Angels Fear to Tread — with Sam Wineburg","AUTHOR":"","YEAR":"","THEMES":"Social / User Infrastructure","ABSTRACT":"Educator Sam Wineburg raises critical questions about whether schools and teachers know enough to teach AI literacy responsibly, cautioning against premature confidence in AI education frameworks.","WHY INCLUDED":"Serves as a provocation and entry point for the course itself — useful for framing discussions about what AI literacy actually demands and who gets to define it."},
+  {"SOURCE":"AlgorithmicDisplacementSocial","TITLE":"Algorithmic Displacement of Social Trust","AUTHOR":"","YEAR":"","THEMES":"Data & Platform Ecosystems | Governance & Regulation","ABSTRACT":"Argues that algorithmic amplification systems undermine the social processes that historically produced trustworthy knowledge, replacing communal epistemic norms with engagement-optimized ranking.","WHY INCLUDED":"Essential for teaching how platform infrastructure reshapes public knowledge and erodes trust — connects data ecosystems to broader democratic implications students can observe in daily life."},
+  {"SOURCE":"BuildingAILiteracy2026","TITLE":"Building AI Literacy for Students: Age-appropriate Elementary Activities","AUTHOR":"","YEAR":"2026","THEMES":"Social / User Infrastructure","ABSTRACT":"Presents elementary-level AI literacy activities focused on pattern recognition and sorting exercises, representing mainstream educational approaches to AI that avoid critical or systemic framing.","WHY INCLUDED":"Included as a counterexample — useful for helping students identify what is missing from dominant AI literacy frameworks and why a critical infrastructural approach is necessary."},
+  {"SOURCE":"DataAlgorithmsWork","TITLE":"Data and Algorithms at Work: The Case for Worker Technology Rights","AUTHOR":"","YEAR":"","THEMES":"Governance & Regulation | Social / User Infrastructure","ABSTRACT":"Proposes a comprehensive framework of worker technology rights, arguing that workers subjected to algorithmic management deserve transparency, contestability, and data access.","WHY INCLUDED":"Essential for teaching the labor dimension of AI infrastructure, giving students concrete policy language for understanding how algorithmic systems govern workers and what alternatives exist."},
+  {"SOURCE":"DataColonialismAccumulation","TITLE":"Data Colonialism through Accumulation by Dispossession","AUTHOR":"Thatcher, Jim; O'Sullivan, David; Mahmoudi, Dillon","YEAR":"2016","THEMES":"Data & Platform Ecosystems","ABSTRACT":"Applies accumulation-by-dispossession theory to data, arguing that everyday digital activity is extracted from users as raw material for capitalist accumulation without consent or compensation.","WHY INCLUDED":"Provides the Marxist political economy lens for understanding data as infrastructure, helping students connect everyday platform use to broader processes of colonial resource extraction."},
+  {"SOURCE":"DigitalCommoningAlternative","TITLE":"Digital Commoning as an Alternative Form of Social Organization: The Example of OpenStreetMap","AUTHOR":"","YEAR":"","THEMES":"Governance & Regulation | Data & Platform Ecosystems","ABSTRACT":"Examines OpenStreetMap as a model of digital commoning, showing how collective governance of geospatial data can produce an alternative to proprietary platform control.","WHY INCLUDED":"Offers students a concrete working alternative to corporate data infrastructure, useful for assignments that ask them to imagine or evaluate non-extractive models of digital organization."},
+  {"SOURCE":"EthnographerAlgorithmBlack2025","TITLE":"The Ethnographer and the Algorithm: Beyond the Black Box","AUTHOR":"","YEAR":"2025","THEMES":"Data & Platform Ecosystems","ABSTRACT":"Challenges the 'black box' framing of algorithms, arguing that algorithmic studies should focus on relational, situated, and processual analysis rather than technical deciphering.","WHY INCLUDED":"Reframes how students should approach algorithmic systems methodologically, shifting from reverse-engineering to ethnographic and contextual analysis — key for the course's critical orientation."},
+  {"SOURCE":"InstituteNetworkCultures2026","TITLE":"Institute of Network Cultures — Digital Tribulations 6: A Radical Hacker-Fanonian Critique of Digital Colonialism","AUTHOR":"","YEAR":"2026","THEMES":"Governance & Regulation | Social / User Infrastructure","ABSTRACT":"Offers a radical hacker-Fanonian critique of digital colonialism, arguing that decolonization of digital infrastructure requires not just policy reform but structural transformation of ownership and control.","WHY INCLUDED":"Provides a radical political framework for discussing digital infrastructure beyond liberal governance models, useful for teaching students to imagine alternatives that go beyond incremental reform."},
+  {"SOURCE":"MakingSoftwareHow","TITLE":"Making Software: How Is Data Stored?","AUTHOR":"","YEAR":"","THEMES":"Material Infrastructure","ABSTRACT":"Explains how data is physically stored at the hardware level — from electrons to memory architecture — making the material substrate of computation legible to non-technical readers.","WHY INCLUDED":"Grounds the course's material infrastructure theme in the physics of computation itself, helping students understand that data is not ethereal but physically instantiated in energy and matter."},
+  {"SOURCE":"NewMilitaryIndustry2025","TITLE":"The New Military Industry Complex w/ Sam Biddle — Tech Won't Save Us","AUTHOR":"","YEAR":"2025","THEMES":"Governance & Regulation | Material Infrastructure","ABSTRACT":"Examines the new military-industrial complex emerging around AI, arguing that defense contracts and national security imperatives are driving AI development in ways that bypass democratic accountability.","WHY INCLUDED":"Connects material infrastructure to militarization, helping students understand that AI's development trajectory is shaped by state violence and defense spending as much as by consumer markets."},
+  {"SOURCE":"abidPersistentAntiMuslimBias2021","TITLE":"Persistent Anti-Muslim Bias in Large Language Models","AUTHOR":"Abid, Abubakar; Farooqi, Maheen; Zou, James","YEAR":"2021","THEMES":"Data & Platform Ecosystems","ABSTRACT":"Demonstrates that GPT-3 consistently associates Muslim identity with violence across multiple prompting contexts, revealing how training data encodes and amplifies religious bias at scale.","WHY INCLUDED":"Provides a concrete, testable case of bias embedded in large language models, grounding abstract discussions of algorithmic discrimination in measurable outcomes students can examine critically."},
+  {"SOURCE":"agarwalAISuggestionsHomogenize2025","TITLE":"AI Suggestions Homogenize Writing Toward Western Styles and Diminish Cultural Nuances","AUTHOR":"Agarwal, Dhruv; Naaman, Mor; Vashistha, Aditya","YEAR":"2025","THEMES":"Data & Platform Ecosystems | Social / User Infrastructure","ABSTRACT":"Shows through a cross-cultural experiment that AI writing assistants push Indian users toward Western linguistic norms, homogenizing expression and erasing cultural specificity.","WHY INCLUDED":"Directly illustrates how platform-embedded AI reshapes user behavior and cultural expression, making it essential for teaching how AI systems exert soft power over everyday communication."},
+  {"SOURCE":"aliBriefIntroductionDecolonial2016","TITLE":"A Brief Introduction to Decolonial Computing","AUTHOR":"Ali, Syed Mustafa","YEAR":"2016","THEMES":"Governance & Regulation | Social / User Infrastructure","ABSTRACT":"Introduces the concept of decolonial computing, asking whether computing itself needs to be decolonized and proposing frameworks for thinking about technology through postcolonial theory.","WHY INCLUDED":"Provides foundational theoretical vocabulary for the course's critical stance toward AI, helping students question the assumed universality of computational systems and their design values."},
+  {"SOURCE":"aroraNextBillionUsers2019","TITLE":"The Next Billion Users: Digital Life beyond the West","AUTHOR":"Arora, Payal","YEAR":"2019","THEMES":"Social / User Infrastructure","ABSTRACT":"Challenges Western assumptions about the 'next billion users' by documenting how people in the Global South use digital technology for leisure, sociality, and community rather than productivity.","WHY INCLUDED":"Reframes who AI systems are built for and who they imagine as users, essential for teaching students to question the default subject of AI design and its embedded cultural assumptions."},
+  {"SOURCE":"belliAIGigWorkers2025","TITLE":"AI, Gig Workers, and the Erosion of Democracies","AUTHOR":"Belli, Luca","YEAR":"2025","THEMES":"Governance & Regulation | Material Infrastructure","ABSTRACT":"Argues that tech elites have embraced authoritarian governance models, using AI to suppress gig workers, concentrate corporate power, and reshape democratic institutions in their favor.","WHY INCLUDED":"Connects labor infrastructure to political consequences, showing how AI deployment in workplace contexts is inseparable from broader questions of power and democratic accountability."},
+  {"SOURCE":"cohenOligarchyStateCryptopia2025","TITLE":"Oligarchy, State, and Cryptopia","AUTHOR":"Cohen, Julie E.","YEAR":"2025","THEMES":"Governance & Regulation","ABSTRACT":"Analyzes how a small group of tech oligarchs wield unprecedented personal power through the infrastructural control of platform firms, shaping finance, governance, and the future of AI development.","WHY INCLUDED":"Provides the political economy framing needed to understand who controls AI infrastructure and why, grounding abstract discussions of power in the concrete reality of oligarchic accumulation."},
+  {"SOURCE":"crawfordAtlasAIPower2021","TITLE":"The Atlas of AI: Power, Politics, and the Planetary Costs of Artificial Intelligence","AUTHOR":"Crawford, Kate","YEAR":"2021","THEMES":"Material Infrastructure | Governance & Regulation","ABSTRACT":"Maps AI as a planetary system of resource extraction — from lithium mines to data labor — arguing that every AI interaction is connected to physical infrastructure, environmental cost, and human exploitation.","WHY INCLUDED":"The foundational text for the course's infrastructural framing, providing students with a comprehensive model for tracing the full material and political supply chain behind AI systems."},
+  {"SOURCE":"dignazioshe_ellaWhatTechnofascism2026","TITLE":"What Is Technofascism?","AUTHOR":"D'Ignazio, Catherine","YEAR":"2026","THEMES":"Governance & Regulation | Social / User Infrastructure","ABSTRACT":"Defines technofascism as the fusion of tech oligarchy with authoritarian state power, arguing that current AI deployment patterns are accelerating the dismantling of democratic institutions.","WHY INCLUDED":"Provides critical vocabulary for naming the political stakes of AI infrastructure, helping students connect seemingly technical decisions to the erosion of civil and democratic life."},
+  {"SOURCE":"dosunmuGoogleBacksAfrican2026","TITLE":"Google Backs African Push to Reclaim AI Language Data","AUTHOR":"Dosunmu, Damilare","YEAR":"2026","THEMES":"Data & Platform Ecosystems | Governance & Regulation","ABSTRACT":"Reports on a new 21-language African dataset that gives African institutions ownership and governance over AI language data, challenging Big Tech's monopoly on training data.","WHY INCLUDED":"Illustrates an active site of resistance to data colonialism, useful for teaching students that infrastructure ownership is contested and that alternative governance models are being built."},
+  {"SOURCE":"dunneHertzianTalesElectronic2008","TITLE":"Hertzian Tales: Electronic Products, Aesthetic Experience, and Critical Design","AUTHOR":"Dunne, Anthony","YEAR":"2008","THEMES":"Material Infrastructure","ABSTRACT":"Explores the electromagnetic environment as a hidden but pervasive material infrastructure, arguing that critical design can make invisible technological systems perceptible and politically legible.","WHY INCLUDED":"Grounds the course in a design studies tradition of making infrastructure visible, providing students with tools for developing critical and adversarial design responses to AI systems."},
+  {"SOURCE":"dziezaAIFactory2023","TITLE":"Inside the AI Factory","AUTHOR":"Dzieza, Josh","YEAR":"2023","THEMES":"Material Infrastructure | Social / User Infrastructure","ABSTRACT":"Investigates the massive hidden human labor force behind AI systems — the annotators, moderators, and trainers — revealing that automation is actually sustained by millions of low-wage workers.","WHY INCLUDED":"Essential for dismantling the myth of AI as autonomous, showing students the invisible human infrastructure that makes machine intelligence possible and the exploitative conditions under which it operates."},
+  {"SOURCE":"ensmengerCloudFactory2021","TITLE":"The Cloud Is a Factory","AUTHOR":"Ensmenger, Nathan","YEAR":"2021","THEMES":"Material Infrastructure","ABSTRACT":"Traces the material and industrial underpinnings of the cloud, showing how Amazon's digital infrastructure depends on enormous physical warehouses, logistics networks, and human labor.","WHY INCLUDED":"Concretizes the abstraction of 'the cloud' into physical infrastructure and labor, making it a key text for teaching students to see the factory behind the interface."},
+  {"SOURCE":"espin-noboaInequalityInequityNetworkbased2022","TITLE":"Inequality and Inequity in Network-Based Ranking and Recommendation Algorithms","AUTHOR":"Espín-Noboa, Lisette et al.","YEAR":"2022","THEMES":"Data & Platform Ecosystems","ABSTRACT":"Demonstrates mathematically that PageRank and similar algorithms systematically amplify existing social inequalities, showing that algorithmic ranking is not neutral but structurally biased.","WHY INCLUDED":"Provides a rigorous technical grounding for claims about algorithmic discrimination, useful for teaching students that bias is embedded in the mathematical structure of platforms, not just their content."},
+  {"SOURCE":"fathallahArtificialIntelligenceOrchestration2025","TITLE":"Artificial Intelligence and the Orchestration of Palestinian Life and Death","AUTHOR":"Fathallah, Sarah","YEAR":"2025","THEMES":"Governance & Regulation | Social / User Infrastructure","ABSTRACT":"Documents how AI systems are used to orchestrate targeting and surveillance of Palestinian civilians, arguing that data collected on deaths is used to optimize lethal military systems.","WHY INCLUDED":"Makes concrete the life-and-death stakes of AI infrastructure deployed by states, essential for teaching students that AI governance failures have direct human consequences at the level of survival."},
+  {"SOURCE":"flensburgFollowDataStrategy2023","TITLE":"Follow the Data! A Strategy for Tracing Infrastructural Power","AUTHOR":"Flensburg, Sofie; Lai, Signe Sophus","YEAR":"2023","THEMES":"Material Infrastructure | Data & Platform Ecosystems","ABSTRACT":"Proposes 'follow the data' as a methodological strategy for tracing infrastructural power, showing how critical data studies can map the hidden networks of platform capitalism.","WHY INCLUDED":"Gives students a concrete research methodology for investigating AI infrastructure, applicable directly to course assignments that ask them to trace and map AI systems."},
+  {"SOURCE":"fowlerColumnSeeChatGPTs2026","TITLE":"See ChatGPT's Hidden Bias about Your State or City","AUTHOR":"Fowler, Geoffrey A.; Schaul, Kevin","YEAR":"2026","THEMES":"Data & Platform Ecosystems | Social / User Infrastructure","ABSTRACT":"Reveals through interactive research that ChatGPT holds hidden geographic biases, rating cities and states differently based on patterns embedded in its training data.","WHY INCLUDED":"Provides an accessible, interactive entry point for students to experience AI bias firsthand, connecting abstract claims about training data to concrete outputs they can probe and test."},
+  {"SOURCE":"halperAnalysisSupersizedData2025","TITLE":"Supersized Data Centers Are Coming. See How They Will Transform America.","AUTHOR":"Halper, Evan","YEAR":"2025","THEMES":"Material Infrastructure","ABSTRACT":"Investigates the physical footprint of next-generation AI data centers, showing how they consume more power than major cities and are transforming American landscapes and energy grids.","WHY INCLUDED":"Makes the material infrastructure of AI visible at a geographic scale, giving students a framework for understanding the environmental and spatial consequences of AI expansion."},
+  {"SOURCE":"hartzogHowAIDestroys2025","TITLE":"How AI Destroys Institutions","AUTHOR":"Hartzog, Woodrow; Silbey, Jessica M.","YEAR":"2025","THEMES":"Governance & Regulation | Social / User Infrastructure","ABSTRACT":"Argues that the affordances of AI systems systematically erode the transparency, accountability, and human relationships that sustain civic institutions like universities, courts, and the press.","WHY INCLUDED":"Essential for teaching the societal infrastructure dimension of AI, helping students understand how AI deployment is not politically neutral but actively reshapes the institutions that organize democratic life."},
+  {"SOURCE":"institute1AITech2024","TITLE":"AI and Tech Industrial Policy: From Post-Cold War Post-Industrialism to Post-Neoliberal Re-Industrialization","AUTHOR":"AI Now Institute","YEAR":"2024","THEMES":"Governance & Regulation | Material Infrastructure","ABSTRACT":"Shows how AI development has always depended on state investment, defense priorities, and semiconductor policy rather than purely private innovation, tracing the political economy of tech from the Cold War forward.","WHY INCLUDED":"Grounds AI's current infrastructure in historical state-industry entanglement, giving students the context needed to understand why AI is not a neutral market product but a geopolitical project."},
+  {"SOURCE":"instituteAlgorithmicManagementRestraining2023","TITLE":"Algorithmic Management: Restraining Workplace Surveillance","AUTHOR":"AI Now Institute","YEAR":"2023","THEMES":"Governance & Regulation | Social / User Infrastructure","ABSTRACT":"Examines how algorithmic management systems surveil and control workers, arguing that meaningful reform requires bright-line rules that restrict data collection and automated decision-making in workplaces.","WHY INCLUDED":"Connects AI infrastructure to labor control, providing students with a policy framework for understanding how platform governance of workers operates and what regulatory responses are possible."},
+  {"SOURCE":"instituteArtificialPower20252025","TITLE":"Artificial Power: 2025 Landscape Report","AUTHOR":"AI Now Institute","YEAR":"2025","THEMES":"Governance & Regulation","ABSTRACT":"Surveys the current AI landscape, arguing that the push to integrate AI everywhere consolidates power in the hands of a small group of tech oligarchs with reach far beyond their financial resources.","WHY INCLUDED":"Provides students with a current map of AI power concentration, essential for contextualizing the course's critical framing within the political reality of 2025's AI boom."},
+  {"SOURCE":"instituteClimateJusticeLabor2023","TITLE":"Climate Justice and Labor Rights — Part I: AI Supply Chains and Workflows","AUTHOR":"AI Now Institute","YEAR":"2023","THEMES":"Material Infrastructure | Governance & Regulation","ABSTRACT":"Links AI's carbon footprint to global supply chains of mineral extraction and precarious labor, arguing that AI cannot be understood as immaterial software but must be seen as a climate and labor justice issue.","WHY INCLUDED":"Bridges material infrastructure and governance themes, showing students how environmental and labor exploitation are structurally connected within the AI supply chain."},
+  {"SOURCE":"iraniPostcolonialComputingLens2010","TITLE":"Postcolonial Computing: A Lens on Design and Development","AUTHOR":"Irani, Lilly et al.","YEAR":"2010","THEMES":"Social / User Infrastructure | Governance & Regulation","ABSTRACT":"Proposes postcolonial computing as a lens for design and development, arguing that computing systems encode colonial assumptions about universality, progress, and the neutral user.","WHY INCLUDED":"Foundational for the course's decolonial orientation, giving students theoretical tools for interrogating whose values are embedded in computational systems and how design reproduces colonial hierarchies."},
+  {"SOURCE":"katzArtificialWhitenessColumbia2020","TITLE":"Artificial Whiteness","AUTHOR":"Katz, Yarden","YEAR":"2020","THEMES":"Governance & Regulation | Data & Platform Ecosystems","ABSTRACT":"Argues that artificial intelligence is an ideological project shaped by military, corporate, and policy institutions that reproduce whiteness as a norm embedded in data, algorithms, and governance.","WHY INCLUDED":"Provides a race-critical framework for understanding AI as a political and cultural project, essential for teaching students to see how racial ideology is encoded in seemingly neutral technical systems."},
+  {"SOURCE":"koebler_AISuperchargingWar2025","TITLE":"AI Is Supercharging the War on Libraries, Education, and Human Knowledge","AUTHOR":"Koebler, Jason","YEAR":"2025","THEMES":"Governance & Regulation | Social / User Infrastructure","ABSTRACT":"Documents how AI systems are being deployed to accelerate attacks on libraries, public education, and knowledge commons, arguing that fascism and AI are mutually accelerating forces.","WHY INCLUDED":"Connects AI infrastructure to the dismantling of public knowledge institutions, helping students understand the stakes of AI governance for education, access, and democratic participation."},
+  {"SOURCE":"kupferLanguageColonialityNonDominant2022","TITLE":"Language and Coloniality: Non-Dominant Languages in the Digital Landscape","AUTHOR":"Kupfer, Meital; Muyumba, Jason","YEAR":"2022","THEMES":"Data & Platform Ecosystems | Social / User Infrastructure","ABSTRACT":"Shows how social media platforms marginalize speakers of non-dominant languages through design choices and moderation practices that privilege a small number of languages as default.","WHY INCLUDED":"Essential for teaching how platform infrastructure enacts linguistic colonialism, making visible the choices embedded in platform design that determine whose language and voice is legible."},
+  {"SOURCE":"kwetDigitalColonialismInfrastructureasDebt2022","TITLE":"Digital Colonialism and Infrastructure-as-Debt","AUTHOR":"Kwet, Michael","YEAR":"2022","THEMES":"Material Infrastructure | Governance & Regulation","ABSTRACT":"Analyzes digital colonialism in South Africa, showing how foreign ownership of core digital infrastructure creates long-term economic dependency through what the author calls 'infrastructure-as-debt.'","WHY INCLUDED":"Applies the course's infrastructural framing to a specific geopolitical case, giving students a model for analyzing how infrastructure ownership operates as a mechanism of colonial extraction."},
+  {"SOURCE":"kwetDigitalColonialismUS2019","TITLE":"Digital Colonialism: US Empire and the New Imperialism in the Global South","AUTHOR":"Kwet, Michael","YEAR":"2019","THEMES":"Governance & Regulation | Material Infrastructure","ABSTRACT":"Proposes a conceptual framework of US digital colonialism, arguing that American multinationals exercise imperial control through dominance of software, hardware, and network connectivity in the Global South.","WHY INCLUDED":"Provides the theoretical foundation for understanding AI infrastructure as a form of empire, essential for teaching students to connect platform capitalism to historical patterns of colonial domination."},
+  {"SOURCE":"lang-ritterGlobalGriddedPopulation2025","TITLE":"Global Gridded Population Datasets Systematically Underrepresent Rural Population","AUTHOR":"Láng-Ritter, Josias et al.","YEAR":"2025","THEMES":"Data & Platform Ecosystems","ABSTRACT":"Finds that global gridded population datasets systematically undercount rural populations by up to 84%, revealing how data infrastructure encodes urban bias that distorts policy and resource allocation.","WHY INCLUDED":"Grounds abstract claims about data bias in a concrete empirical case, showing students how the infrastructure of data collection produces structural invisibility for marginalized populations."},
+  {"SOURCE":"loUniversityVirginiaArchival2026","TITLE":"The University of Virginia Archival AI Protocol","AUTHOR":"Lo, Leo","YEAR":"2026","THEMES":"Governance & Regulation | Data & Platform Ecosystems","ABSTRACT":"Establishes an AI training and access protocol for archival institutions, building on the principle that no AI model gets access to archival data without provenance, consent, and institutional control.","WHY INCLUDED":"Models what governance of AI training data looks like in practice, useful for teaching students that data infrastructure governance is an active site of institutional design and resistance."},
+  {"SOURCE":"mascoBadWeatherPlanetary2010","TITLE":"Bad Weather: On Planetary Crisis","AUTHOR":"Masco, Joseph","YEAR":"2010","THEMES":"Material Infrastructure","ABSTRACT":"Traces how Cold War nuclear science produced not only weapons but a new understanding of earth as biosphere, showing how planetary crisis thinking emerged from military infrastructure.","WHY INCLUDED":"Provides historical depth for understanding how material infrastructure — particularly military infrastructure — shapes scientific knowledge and planetary consciousness, relevant to AI's own military origins."},
+  {"SOURCE":"mcintyreGigWorkersAfrica2026","TITLE":"Gig Workers in Africa Have Been Helping the US Military. They Had No Idea","AUTHOR":"McIntyre, Niamh; Okoth, Edwin; Wilson, Cam","YEAR":"2026","THEMES":"Material Infrastructure | Social / User Infrastructure","ABSTRACT":"Reveals that African gig workers employed by the company Appen were unknowingly labeling data for US military AI applications, with no transparency about end use or geopolitical implications.","WHY INCLUDED":"Makes visceral the global labor infrastructure of AI, showing students how the supply chain of data annotation connects precarious African workers to military violence without their knowledge or consent."},
+  {"SOURCE":"meyerPlatformRealismAI2025","TITLE":"Platform Realism: AI Image Synthesis and the Rise of Generic Visual Content","AUTHOR":"Meyer, Roland","YEAR":"2025","THEMES":"Data & Platform Ecosystems | Social / User Infrastructure","ABSTRACT":"Theorizes 'platform realism' as the aesthetic of AI image synthesis — a second-order generic visual culture optimized for corporate standards and consumer expectations rather than authentic representation.","WHY INCLUDED":"Connects AI infrastructure to visual culture and design, useful for teaching students to critically analyze how platform capitalism shapes what images AI produces and whose visual norms it encodes."},
+  {"SOURCE":"nadlerWeaponizingDigitalInfluence2018","TITLE":"Weaponizing the Digital Influence Machine","AUTHOR":"Nadler, Anthony; Donovan, Joan","YEAR":"2018","THEMES":"Data & Platform Ecosystems | Governance & Regulation","ABSTRACT":"Identifies how digital advertising infrastructure can be weaponized by political actors, showing how the technical systems of ad targeting enable large-scale manipulation of democratic discourse.","WHY INCLUDED":"Essential for teaching the political infrastructure of platforms, showing students how advertising technology — built for commerce — becomes a vector for antidemocratic influence operations."},
+  {"SOURCE":"oduro404JobNot","TITLE":"(404) Job Not Found","AUTHOR":"Oduro, Serena; Akanegbu, Anuli","YEAR":"","THEMES":"Social / User Infrastructure | Governance & Regulation","ABSTRACT":"Investigates how perceptions of AI literacy are reshaping labor market outcomes for Black workers, showing that 'AI literacy' as currently defined reproduces racial inequity in hiring and career advancement.","WHY INCLUDED":"Brings race and labor together in the context of AI literacy itself, making it directly relevant to the course's central question of who benefits from dominant AI literacy frameworks."},
+  {"SOURCE":"pakzadDevelopersChooseWisely2020","TITLE":"Developers, Choose Wisely: A Guide for Responsible Use of Machine Learning APIs","AUTHOR":"Pakzad, Roya","YEAR":"2020","THEMES":"Governance & Regulation | Data & Platform Ecosystems","ABSTRACT":"Provides a practical guide for developers on the responsible use of machine learning APIs, arguing that technical choices made at the API level have significant human rights implications.","WHY INCLUDED":"Bridges technical practice and ethics, giving students a framework for evaluating the governance implications of design decisions made at the infrastructure level of AI development."},
+  {"SOURCE":"pakzadDontTrustSalt2026","TITLE":"Don't Trust the Salt: AI Summarization, Multilingual Safety, and the LLM Guardrails That Need Guarding","AUTHOR":"Pakzad, Roya","YEAR":"2026","THEMES":"Data & Platform Ecosystems | Governance & Regulation","ABSTRACT":"Demonstrates how AI summarization and multilingual guardrails fail in human rights contexts, showing that safety mechanisms built for English break down when applied across languages.","WHY INCLUDED":"Provides a current, concrete case of governance failure at the language infrastructure level, essential for teaching students that AI safety is a multilingual and culturally situated problem."},
+  {"SOURCE":"pasternackBoomingMilitarySpending2025","TITLE":"Booming Military Spending on AI Is a Windfall for Tech — and a Blow to Democracy","AUTHOR":"Pasternack et al.","YEAR":"2025","THEMES":"Governance & Regulation | Material Infrastructure","ABSTRACT":"Documents the surge in military AI spending and argues that the national security imperative is giving the tech industry unprecedented political influence while weakening democratic oversight.","WHY INCLUDED":"Connects military infrastructure to corporate power and democratic erosion, helping students understand how defense spending reshapes who controls AI infrastructure and on whose terms."},
+  {"SOURCE":"prol32AICant2026","TITLE":"#32 — AI Can't Add Flavor to Computing Education","AUTHOR":"Prol, Daniel","YEAR":"2026","THEMES":"Social / User Infrastructure","ABSTRACT":"Argues that AI cannot substitute for the human values and relational dimensions of computing education, critiquing the assumption that AI tools can add meaning or flavor to technical learning.","WHY INCLUDED":"Useful as a critical counterpoint to techno-optimist AI literacy frameworks, helping students interrogate what is lost when AI mediates educational relationships and knowledge formation."},
+  {"SOURCE":"shenHowAIImpacts2026","TITLE":"How AI Impacts Skill Formation","AUTHOR":"Shen, Judy Hanwen; Tamkin, Alex","YEAR":"2026","THEMES":"Social / User Infrastructure","ABSTRACT":"Finds through randomized experiments that AI assistance impairs developers' conceptual understanding and debugging skills, suggesting that AI-enhanced productivity comes at the cost of skill formation.","WHY INCLUDED":"Directly relevant to the course's pedagogical stakes, giving students empirical evidence for thinking critically about how AI tools reshape learning, competence, and the nature of expertise."},
+  {"SOURCE":"shojaeeIllusionThinkingUnderstanding2025","TITLE":"The Illusion of Thinking: Understanding the Strengths and Limitations of Reasoning Models","AUTHOR":"Shojaee, Parshin et al.","YEAR":"2025","THEMES":"Data & Platform Ecosystems","ABSTRACT":"Shows that large reasoning models face complete accuracy collapse beyond certain complexity thresholds, revealing fundamental limitations in how LLMs scale to difficult problems.","WHY INCLUDED":"Provides a critical foil to AI hype, giving students empirical grounding for questioning claims about AI capability and helping them develop a more nuanced understanding of what LLMs actually do."},
+  {"SOURCE":"starEthnographyInfrastructure1999","TITLE":"The Ethnography of Infrastructure","AUTHOR":"Star, Susan Leigh","YEAR":"1999","THEMES":"Material Infrastructure","ABSTRACT":"Argues that infrastructure is invisible until it breaks, embedded in social practices, and shaped by community standards — proposing ethnography as the method for making infrastructure visible.","WHY INCLUDED":"The theoretical cornerstone of the course's infrastructural framing, giving students the conceptual vocabulary to see AI systems as infrastructure and to ask whose practices and standards they encode."},
+  {"SOURCE":"stoplapdspyingAlgorithmicEcologyAbolitionist2020","TITLE":"The Algorithmic Ecology: An Abolitionist Tool for Organizing Against Algorithms","AUTHOR":"Stop LAPD Spying Coalition","YEAR":"2020","THEMES":"Governance & Regulation | Social / User Infrastructure","ABSTRACT":"Presents the Algorithmic Ecology as an abolitionist tool for mapping how algorithms connect to systems of surveillance, policing, and social control in communities targeted by law enforcement.","WHY INCLUDED":"Models a community-centered, abolitionist methodology for analyzing AI infrastructure, giving students a concrete example of critical AI literacy in practice outside of academic contexts."},
+  {"SOURCE":"tangAdsThatTalk2025","TITLE":"Ads That Talk Back: Implications and Perceptions of Injecting Personalized Advertising into LLM Chatbots","AUTHOR":"Tang, Brian Jay et al.","YEAR":"2025","THEMES":"Data & Platform Ecosystems | Governance & Regulation","ABSTRACT":"Investigates personalized advertising injected into LLM chatbots, finding that users struggle to detect embedded ads and may prefer AI responses that contain hidden commercial influence.","WHY INCLUDED":"Exposes the commercial infrastructure beneath AI interfaces, teaching students that the 'neutral assistant' framing conceals advertising systems designed to shape preferences and behavior."},
+  {"SOURCE":"techBitsMachineZine2024","TITLE":"Bits in the Machine (Zine)","AUTHOR":"Collective Action in Tech; DAIR Institute","YEAR":"2024","THEMES":"Social / User Infrastructure | Material Infrastructure","ABSTRACT":"A zine collecting worker stories from the age of generative AI, documenting firsthand accounts of surveillance, displacement, and resistance from workers inside the tech industry.","WHY INCLUDED":"Brings worker voice and labor infrastructure into the course through a non-academic format, modeling how different kinds of knowledge production can document AI's human costs."},
+  {"SOURCE":"utopiaWhyTechWorkers2026","TITLE":"Why Tech Workers Coalition?","AUTHOR":"Conjure Utopia","YEAR":"2026","THEMES":"Social / User Infrastructure","ABSTRACT":"Makes the case for Tech Workers Coalition as an organizational model, arguing that collective action among tech workers is essential for challenging the power of tech oligarchs from within.","WHY INCLUDED":"Provides students with a model of labor organizing specific to the tech industry, connecting the course's labor infrastructure theme to active forms of worker resistance and solidarity."},
+  {"SOURCE":"kwetDigitalTechDeal2022","TITLE":"The Digital Tech Deal: A Socialist Framework for the Twenty-First Century","AUTHOR":"Kwet, Michael","YEAR":"2022","THEMES":"Governance & Regulation","ABSTRACT":"Argues that liberal tech reforms are insufficient and proposes a socialist Digital Tech Deal based on the socialization of knowledge infrastructure, anti-colonial frameworks, and degrowth economics.","WHY INCLUDED":"Offers students a concrete policy alternative to corporate AI governance, useful for assignments that ask them to evaluate or design regulatory responses to digital infrastructure."},
+  {"SOURCE":"kwetSocialMediaSocialism2020","TITLE":"Social Media Socialism: People's Tech and Decolonization for a Global Society in Crisis","AUTHOR":"Kwet, Michael","YEAR":"2020","THEMES":"Governance & Regulation | Data & Platform Ecosystems","ABSTRACT":"Proposes commons-based social media decentralization as an alternative to Big Social Media, outlining technical and legal tools for building people-owned network infrastructure.","WHY INCLUDED":"Provides students with a detailed blueprint for alternative platform infrastructure, useful for teaching that the architecture of social media is a political choice with democratic implications."}
+];
+
+const THEME_MAP = {
+  'material': 'Material Infrastructure',
+  'data': 'Data & Platform Ecosystems',
+  'gov': 'Governance & Regulation',
+  'social': 'Social / User Infrastructure'
+};
+
+const TAG_CLASS = {
+  'Material Infrastructure': 'tag-material',
+  'Data & Platform Ecosystems': 'tag-data',
+  'Governance & Regulation': 'tag-gov',
+  'Social / User Infrastructure': 'tag-social'
+};
+
+function cleanTitle(t) {
+  return t.replace(/\\textbar\{\}/g, '|').replace(/\{\{|\}\}/g, '').replace(/\\/g, '');
+}
+
+function renderSources(filter) {
+  const list = document.getElementById('source-list');
+  const countEl = document.getElementById('source-count');
+  list.innerHTML = '';
+
+  const filtered = filter === 'all'
+    ? sources
+    : sources.filter(s => s.THEMES.includes(THEME_MAP[filter]));
+
+  countEl.textContent = `Showing ${filtered.length} source${filtered.length !== 1 ? 's' : ''}`;
+
+  filtered.forEach((s, i) => {
+    const themes = s.THEMES.split(' | ').map(t => t.trim());
+    const tags = themes.map(t => `<span class="tag ${TAG_CLASS[t] || ''}">${t}</span>`).join('');
+    const author = s.AUTHOR && s.AUTHOR !== 'No author' ? s.AUTHOR : '';
+    const year = s.YEAR && s.YEAR !== 'No year' ? s.YEAR : '';
+    const authorYear = [author, year].filter(Boolean).join(', ');
+
+    const item = document.createElement('div');
+    item.className = 'source-item';
+    item.innerHTML = `
+      <div class="source-toggle" onclick="toggleSource(this)">
+        <span class="source-title">${cleanTitle(s.TITLE)}</span>
+        <span class="source-year">${year}</span>
+        <span class="source-expand">+</span>
+      </div>
+      <div class="source-detail">
+        ${authorYear ? `<p class="source-author">${authorYear}</p>` : ''}
+        <div class="source-tags">${tags}</div>
+        <p class="source-abstract">${s.ABSTRACT}</p>
+        <p class="source-why">${s['WHY INCLUDED']}</p>
+      </div>
+    `;
+    list.appendChild(item);
+  });
+}
+
+function toggleSource(toggle) {
+  const detail = toggle.nextElementSibling;
+  const arrow = toggle.querySelector('.source-expand');
+  const isOpen = detail.classList.contains('open');
+  detail.classList.toggle('open', !isOpen);
+  arrow.textContent = isOpen ? '+' : '−';
+}
+
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderSources(btn.dataset.filter);
+  });
+});
+
+renderSources('all');
+</script>
+
+</body>
+</html>
